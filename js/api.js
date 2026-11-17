@@ -33,7 +33,7 @@ export async function dataFetch() {
 
 export async function updateChannel(channelId, channelData) {
   const response = await fetch(`${API_URL}/${channelId}`, {
-    method: "PATCH",
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(channelData),
   });
