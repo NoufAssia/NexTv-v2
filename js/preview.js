@@ -18,6 +18,9 @@ console.log("DEFAULT:", defImg);
 console.log("CHANNELS:", channelsDiv);
 export function showImg(data) {
   channelsDiv.addEventListener("click", (event) => {
+    
+
+
     const click = event.target.closest(".channel");
     const clickedChannel = data.find((channel) => {
       return channel.id === click.dataset.id;
