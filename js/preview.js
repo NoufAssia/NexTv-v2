@@ -42,11 +42,11 @@ export async function showImg(data) {
         });
         channelData.isFavorite = updtChannel.isFavorite;
 
-        const startImg = favButton.querySelector("img");
+        const starImg = favButton.querySelector("img");
         if (channelData.isFavorite === true) {
-          startImg.src = "./assets/star.png";
+          starImg.src = "./assets/star.png";
         } else {
-          startImg.src = "./assets/star-vide.png";
+          starImg.src = "./assets/star-vide.png";
         }
       } catch (error) {
         console.log("issues in favorate update:", error);
