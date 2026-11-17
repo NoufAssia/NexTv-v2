@@ -1,3 +1,5 @@
+import { updateChannel } from "./api.js";
+
 const hostDiv = document.querySelector("#host-div");
 const defImg = document.querySelector("#default-img");
 const channelsDiv = document.querySelector("#listCahnnel");
@@ -16,8 +18,44 @@ const channelInfos = document.querySelector("#channel-infos");
 console.log("HOST:", hostDiv);
 console.log("DEFAULT:", defImg);
 console.log("CHANNELS:", channelsDiv);
-export function showImg(data) {
-  channelsDiv.addEventListener("click", (event) => {
+
+export async function showImg(data) {
+  channelsDiv.addEventListener("click", async (event) => {
+    // click on star button to change the isfavorite
+
+    const favButton = event.target.closest(".favButton");
+    if (favButton) {
+      const targetChannel = favButton.closest(".channel");
+      const channelData = data.find((channel) => {
+        return channel.id === targetChannel.dataset.id;
+      });
+
+      if (!channelData) {
+        return;
+      }
+
+      const channelFav = !channelData.isFavorite;
+
+      try {
+        const updtChannel = await updateChannel(channelData.id, {
+          isFavorite: channelFav,
+        });
+        channelData.isFavorite = updtChannel.isFavorite;
+
+        const startImg = favButton.querySelector("img");
+        if (channelData.isFavorite === true) {
+          startImg.src = "./assets/star.png";
+        } else {
+          startImg.src = "./assets/star-vide.png";
+        }
+      } catch (error) {
+        console.log("issues in favorate update:", error);
+      }
+      return;
+    }
+
+    //click on channel name to preview it's pic
+
     const click = event.target.closest(".channel");
     const clickedChannel = data.find((channel) => {
       return channel.id === click.dataset.id;
