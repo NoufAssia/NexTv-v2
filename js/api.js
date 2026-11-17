@@ -1,9 +1,9 @@
+const API_URL = "https://6af3246ed2377d6c370496dd.mockapi.io/api/v1/channels";
+
 export async function dataFetch() {
   try {
     console.log("fech strated");
-    const response = await fetch(
-      "https://6af3246ed2377d6c370496dd.mockapi.io/api/v1/channels",
-    );
+    const response = await fetch(API_URL);
 
     // const response = new Response(null, {
     //   status: 500,
@@ -27,4 +27,45 @@ export async function dataFetch() {
     console.error("API Error:", error);
     throw error;
   }
+}
+
+// update the favorite and blacklist
+
+export async function updateChannel(channelId, channelData) {
+  const response = await fetch(`${API_URL}/${channelId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(channelData),
+  });
+  if (!response.ok) {
+    throw new Error("something went wrong with fetching");
+  }
+  return await response.json();
+}
+
+
+//add a new channel
+
+export async function addChannel(channelObject){
+  const response = await fetch (API_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(channelObject),
+  });
+  if(!response.ok){
+    throw new Error("error with fetch in addChannel");
+  }
+  return await response.json();
+}
+
+//delete a channel
+
+export async function deleteChannel(channelId){
+  const response = await fetch(`${API_URL}/${channelId}`, {
+    method: "DELETE",
+  });
+  if(!response.ok){
+    throw new Error("error with fetch in  deleteChannel");
+  }
+  return true;
 }
