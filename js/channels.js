@@ -27,19 +27,18 @@ export function showCahnnels(data) {
 
     const name = document.createElement("span");
     name.textContent = channel.name;
-    name.className="flex-1 text-left min-w-0 truncate "
+    name.className = "flex-1 text-left min-w-0 truncate ";
 
+    // create favorite button
 
-  // create favorite button
-
-  const favButton = document.createElement("button");
-  favButton.className ="w-4 h-4 mr-7 flex-shrink-0 ml-auto opacity-0 group-hover:opacity-100";
-  if(channel.isFavorite === false)
-  {
-    favButton.innerHTML =`<img src="./assets/star-vide.png" alt="not favorite icon">`;
-  }else{
-    favButton.innerHTML =`<img src="./assets/star.png" alt="not favorite icon">`;
-  }
+    const favButton = document.createElement("button");
+    favButton.className =
+      "favButton w-4 h-4 mr-7 flex-shrink-0 ml-auto opacity-0 group-hover:opacity-100 cursor-pointer";
+    if (channel.isFavorite === false) {
+      favButton.innerHTML = `<img src="./assets/star-vide.png" alt="not favorite icon">`;
+    } else {
+      favButton.innerHTML = `<img src="./assets/star.png" alt="not favorite icon">`;
+    }
 
     channelDiv.append(logo, number, name, favButton);
     channelsDiv.appendChild(channelDiv);
