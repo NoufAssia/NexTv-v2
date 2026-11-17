@@ -22,7 +22,7 @@ I chose this name to reflect the vision behind the project: creating a modern te
 
 ## 🌐 Live Demo
 
-[Explore NEXTV](https://nextv-kappa.vercel.app/)
+[Explore NEXTV-V2](https://nextv-v2.vercel.app/)
 
 ## 🎯 Project Context
 

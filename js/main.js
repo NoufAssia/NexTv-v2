@@ -4,6 +4,8 @@ import { showCahnnels } from "./channels.js";
 import { dataFetch } from "./api.js";
 import { showImg } from "./preview.js";
 import { updateData } from "./updt-data.js";
+import {allAndFav} from "./filterBtns.js";
+allAndFav();
 dateAndTime();
 
 const loading = document.querySelector("#loading");
