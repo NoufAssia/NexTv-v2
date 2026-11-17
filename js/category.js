@@ -80,6 +80,8 @@ function categoryFilter(filtredCategory, channels) {
   // console.log("all" + all);
   // console.log("array" + array);
 }
+
+
 let searchResult = [];
 function search() {
   // console.log("result", searchOutput);
