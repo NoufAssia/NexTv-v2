@@ -3,6 +3,7 @@ import { showCategories } from "./category.js";
 import { showCahnnels } from "./channels.js";
 import { dataFetch } from "./api.js";
 import { showImg } from "./preview.js";
+import { updateData } from "./updt-data.js";
 dateAndTime();
 
 const loading = document.querySelector("#loading");
