@@ -5,7 +5,6 @@ import { dataFetch } from "./api.js";
 import { showImg } from "./preview.js";
 import { updateData } from "./updt-data.js";
 import {allAndFav} from "./filterBtns.js";
-allAndFav();
 dateAndTime();
 
 const loading = document.querySelector("#loading");
@@ -19,6 +18,7 @@ async function manageError() {
     showCategories(data);
     showCahnnels(data);
     showImg(data);
+    allAndFav ();
     console.log("success", data);
   } catch (error) {
     console.error("failed", error.message);

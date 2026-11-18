@@ -1,4 +1,5 @@
 import { showCahnnels } from "./channels.js";
+// import {filter} from "./filter.js";
 
 const categoryBtn = document.querySelector("#category");
 const categoryPopUp = document.querySelector("#popup-category");
@@ -7,7 +8,8 @@ const searchInput = document.querySelector("#search");
 
 let searchOutput;
 let channels = [];
-let filtredCategory = null;
+let filtredCategory = "ALL CATEGORIES";
+let onlyFav = false;
 
 export function showCategories(data) {
   channels = data;
@@ -45,7 +47,7 @@ function categoryModal(categories, channels) {
     // console.log("category" + filtredCategory);
     selectedCategoryTitle.textContent = selectedCategory;
     categoryPopUp.classList.add("hidden");
-    categoryFilter(filtredCategory, channels);
+    categoryFilter(channels);
   });
 
   document.addEventListener("click", (event) => {
@@ -57,14 +59,30 @@ function categoryModal(categories, channels) {
   });
 }
 
-function categoryFilter(filtredCategory, channels) {
+export function saveMode(value) {
+  onlyFav = value;
+  displayChannelOnMode(searchOutput);
+}
+
+function displayChannelOnMode(data) {
+  if (onlyFav) {
+    const favorites = data.filter((channel) => {
+      return channel.isFavorite === true;
+    });
+    showCahnnels(favorites);
+  } else {
+    showCahnnels(data);
+  }
+}
+
+export function categoryFilter(channels) {
   let array = [];
   let all = channels;
   // console.log("channels" + channels);
   // console.log("f" + filtredCategory);
   if (filtredCategory === "ALL CATEGORIES") {
-    showCahnnels(all);
     searchOutput = all;
+    displayChannelOnMode(searchOutput);
     // search();
     return;
   }
@@ -73,16 +91,16 @@ function categoryFilter(filtredCategory, channels) {
       array.push(channel);
     }
   });
-  showCahnnels(array);
   searchOutput = array;
+  displayChannelOnMode(searchOutput);
   // search();
   // console.log("nn" , searchOutput)
   // console.log("all" + all);
   // console.log("array" + array);
 }
 
-
 let searchResult = [];
+
 function search() {
   // console.log("result", searchOutput);
   searchInput.addEventListener("input", () => {
@@ -103,4 +121,8 @@ function search() {
     });
     showCahnnels(searchResult);
   });
+}
+
+export function share() {
+  return searchOutput;
 }
