@@ -106,7 +106,7 @@ function search() {
   searchInput.addEventListener("input", () => {
     searchResult = [];
     if (searchInput.value.trim() === "") {
-      showCahnnels(searchOutput);
+      displayChannelOnMode(searchOutput);
       return;
     }
     searchOutput.forEach((channel) => {
@@ -119,10 +119,6 @@ function search() {
         searchResult.push(channel);
       }
     });
-    showCahnnels(searchResult);
+    displayChannelOnMode(searchResult);
   });
-}
-
-export function share() {
-  return searchOutput;
 }
