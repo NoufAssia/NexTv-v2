@@ -19,7 +19,10 @@ console.log("HOST:", hostDiv);
 console.log("DEFAULT:", defImg);
 console.log("CHANNELS:", channelsDiv);
 
+let blackArray = [];
+
 export async function showImg(data) {
+  console.count("showImg called");
   channelsDiv.addEventListener("click", async (event) => {
     // click on star button to change the isfavorite
 
@@ -54,13 +57,50 @@ export async function showImg(data) {
       return;
     }
 
+    // click on blacklist
+
+    const blacklist = event.target.closest(".blackListBtn");
+
+    if (blacklist) {
+      const targetChannel = blacklist.closest(".channel");
+      const channelData = data.find((channel) => {
+        return channel.id === targetChannel.dataset.id;
+      });
+
+      if (!channelData) {
+        return;
+      }
+
+      const channelFav = !channelData.isBlacklisted;
+
+      try {
+        const updtChannel = await updateChannel(channelData.id, {
+          isBlacklisted: channelFav,
+        });
+        channelData.isBlacklisted = updtChannel.isBlacklisted;
+
+        if (
+          channelData.isBlacklisted === true &&
+          !blackArray.some((channel) => channel.id === channelData.id)
+        ) {
+          blackArray.push(channelData);
+        }
+
+        targetChannel.classList.add("hidden");
+      } catch (error) {
+        console.log("issues in blacklist update:", error);
+      }
+      return;
+    }
+
     //click on channel name to preview it's pic
 
     const click = event.target.closest(".channel");
-    const clickedChannel = data.find((channel) => {
-      return channel.id === click.dataset.id;
-    });
     if (click) {
+      const clickedChannel = data.find((channel) => {
+        return channel.id === click.dataset.id;
+      });
+
       defImg.classList.add("hidden");
 
       let img = hostDiv.querySelector("#channel-preview");
@@ -74,7 +114,7 @@ export async function showImg(data) {
       img.src = click.dataset.preview;
       img.alt = `${click.dataset.name} preview`;
       channelInfos.textContent = `${click.dataset.number} ${click.dataset.name}`;
-      console.log("test" + channelInfos);
+      console.log("test", channelInfos);
       let epg = clickedChannel.epg;
       currentProgram.classList.remove("hidden");
       epgCp.textContent = epg.currentProgram;
