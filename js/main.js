@@ -4,8 +4,8 @@ import { showCahnnels } from "./channels.js";
 import { dataFetch } from "./api.js";
 import { showImg } from "./preview.js";
 import { updateData } from "./updt-data.js";
-import {allAndFav} from "./filterBtns.js";
-allAndFav();
+import { allAndFav } from "./filterBtns.js";
+import { settings } from "./setting.js";
 dateAndTime();
 
 const loading = document.querySelector("#loading");
@@ -16,9 +16,13 @@ const retryBtn = document.querySelector("#retry-btn");
 async function manageError() {
   try {
     const data = await dataFetch();
-    showCategories(data);
-    showCahnnels(data);
-    showImg(data);
+    let notBlacklist = null;
+    notBlacklist = data.filter((channel) => channel.isBlacklisted === false);
+    showCategories(notBlacklist);
+    showCahnnels(notBlacklist);
+    showImg(notBlacklist);
+    allAndFav();
+    settings();
     console.log("success", data);
   } catch (error) {
     console.error("failed", error.message);
