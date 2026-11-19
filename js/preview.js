@@ -1,4 +1,6 @@
 import { updateChannel } from "./api.js";
+import { showCategories } from "./category.js";
+import { showCahnnels } from "./channels.js";
 
 const hostDiv = document.querySelector("#host-div");
 const defImg = document.querySelector("#default-img");
@@ -19,9 +21,14 @@ console.log("HOST:", hostDiv);
 console.log("DEFAULT:", defImg);
 console.log("CHANNELS:", channelsDiv);
 
-let blackArray = [];
+// let blackArray = [];
 
-export async function showImg(data) {
+export async function showImg(
+  data,
+  blackArray,
+  refreshBlacklist,
+  refreshMainChannels,
+) {
   console.count("showImg called");
   channelsDiv.addEventListener("click", async (event) => {
     // click on star button to change the isfavorite
@@ -59,10 +66,10 @@ export async function showImg(data) {
 
     // click on blacklist
 
-    const blacklist = event.target.closest(".blackListBtn");
+    const blacklistBtn = event.target.closest(".blackListBtn");
 
-    if (blacklist) {
-      const targetChannel = blacklist.closest(".channel");
+    if (blacklistBtn) {
+      const targetChannel = blacklistBtn.closest(".channel");
       const channelData = data.find((channel) => {
         return channel.id === targetChannel.dataset.id;
       });
@@ -78,18 +85,27 @@ export async function showImg(data) {
           isBlacklisted: channelFav,
         });
         channelData.isBlacklisted = updtChannel.isBlacklisted;
-
-        if (
-          channelData.isBlacklisted === true &&
-          !blackArray.some((channel) => channel.id === channelData.id)
-        ) {
+        console.log("1. api ok", blackArray.length, data.length);
+        if (!blackArray.some((channel) => channel.id === channelData.id)) {
           blackArray.push(channelData);
         }
+        // targetChannel.classList.add("hidden");
+        const index = data.findIndex(
+          (channel) => channel.id === channelData.id,
+        );
+        if (index !== -1) {
+          data.splice(index, 1);
+        }
+        console.log("2. arrays changed", blackArray.length, data.length);
+        refreshBlacklist();
+        console.log("3. blacklist refreshed");
 
-        targetChannel.classList.add("hidden");
+        refreshMainChannels();
+        console.log("4. main refreshed");
       } catch (error) {
         console.log("issues in blacklist update:", error);
       }
+
       return;
     }
 
