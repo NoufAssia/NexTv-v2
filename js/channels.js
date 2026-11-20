@@ -1,6 +1,7 @@
 const channelsDiv = document.querySelector("#listCahnnel");
 
 export function showCahnnels(data) {
+  console.log("render main:", data.length);
   channelsDiv.innerHTML = "";
 
   if (data.length === 0) {
@@ -48,4 +49,5 @@ export function showCahnnels(data) {
     channelDiv.append(logo, number, name, favButton, blackListBtn);
     channelsDiv.appendChild(channelDiv);
   });
+  console.log("main DOM children:", channelsDiv.children.length);
 }
