@@ -1,26 +1,52 @@
 import { showCahnnels } from "./channels.js";
+// import {filter} from "./filter.js";
 
 const categoryBtn = document.querySelector("#category");
 const categoryPopUp = document.querySelector("#popup-category");
 const selectedCategoryTitle = document.querySelector("#selected-category");
 const searchInput = document.querySelector("#search");
 
-let searchOutput;
+// let searchOutput;
 let channels = [];
-let filtredCategory = null;
+let filtredCategory = "ALL CATEGORIES";
+let onlyFav = false;
+let searchText = "";
 
 export function showCategories(data) {
   channels = data;
-  searchOutput = data;
-  search();
+  // searchOutput = data;
+  // search();
   const categories = [
     "ALL CATEGORIES",
     ...new Set(channels.map((channel) => channel.category)),
   ];
-  categoryModal(categories, channels);
+  categoryModal(categories);
+  search();
+  refreshChannelDisplay();
 }
 
-function categoryModal(categories, channels) {
+export function refreshChannelDisplay() {
+  let result = channels.filter((channel) => {
+    const matchesCategory =
+      filtredCategory === "ALL CATEGORIES" ||
+      channel.category === filtredCategory;
+
+    const matchesSearch =
+      channel.name.toLowerCase().includes(searchText) ||
+      String(channel.channelNumber).includes(searchText);
+    return matchesCategory && matchesSearch;
+  });
+
+  if (onlyFav) {
+    result = result.filter((channel) => channel.isFavorite === true);
+  }
+  result.sort((a, b) => Number(a.channelNumber) - Number(b.channelNumber));
+  showCahnnels(result);
+}
+
+function categoryModal(categories) {
+  categoryPopUp.innerHTML = "";
+
   categories.forEach((category) => {
     const button = document.createElement("button");
     button.textContent = category.toLowerCase();
@@ -40,65 +66,86 @@ function categoryModal(categories, channels) {
     if (!clickedCategory) {
       return;
     }
-    const selectedCategory = clickedCategory.dataset.category;
-    filtredCategory = selectedCategory;
+    filtredCategory = clickedCategory.dataset.category;
+    // filtredCategory = selectedCategory;
     // console.log("category" + filtredCategory);
-    selectedCategoryTitle.textContent = selectedCategory;
+    selectedCategoryTitle.textContent = filtredCategory;
     categoryPopUp.classList.add("hidden");
-    categoryFilter(filtredCategory, channels);
+    // categoryFilter(channels);
+    refreshChannelDisplay();
   });
 
-  document.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
+  // document.addEventListener("click", (event) => {
+  //   event.stopPropagation();
+  // });
 
   document.addEventListener("click", () => {
     categoryPopUp.classList.add("hidden");
   });
 }
 
-function categoryFilter(filtredCategory, channels) {
-  let array = [];
-  let all = channels;
-  // console.log("channels" + channels);
-  // console.log("f" + filtredCategory);
-  if (filtredCategory === "ALL CATEGORIES") {
-    showCahnnels(all);
-    searchOutput = all;
-    // search();
-    return;
-  }
-  channels.forEach((channel) => {
-    if (channel.category === filtredCategory) {
-      array.push(channel);
-    }
-  });
-  showCahnnels(array);
-  searchOutput = array;
-  // search();
-  // console.log("nn" , searchOutput)
-  // console.log("all" + all);
-  // console.log("array" + array);
+export function saveMode(value) {
+  onlyFav = value;
+  refreshChannelDisplay();
 }
-let searchResult = [];
+
+// function displayChannelOnMode(data) {
+//   if (onlyFav) {
+//     const favorites = data.filter((channel) => {
+//       return channel.isFavorite === true;
+//     });
+//     showCahnnels(favorites);
+//   } else {
+//     showCahnnels(data);
+//   }
+// }
+
+// export function categoryFilter(channels) {
+//   let array = [];
+//   let all = channels;
+//   // console.log("channels" + channels);
+//   // console.log("f" + filtredCategory);
+//   if (filtredCategory === "ALL CATEGORIES") {
+//     searchOutput = all;
+//     displayChannelOnMode(searchOutput);
+//     // search();
+//     return;
+//   }
+//   channels.forEach((channel) => {
+//     if (channel.category === filtredCategory) {
+//       array.push(channel);
+//     }
+//   });
+//   searchOutput = array;
+//   displayChannelOnMode(searchOutput);
+//   // search();
+//   // console.log("nn" , searchOutput)
+//   // console.log("all" + all);
+//   // console.log("array" + array);
+// }
+
+// let searchResult = [];
+
 function search() {
   // console.log("result", searchOutput);
   searchInput.addEventListener("input", () => {
-    searchResult = [];
-    if (searchInput.value.trim() === "") {
-      showCahnnels(searchOutput);
-      return;
-    }
-    searchOutput.forEach((channel) => {
-      if (
-        channel.name
-          .toLowerCase()
-          .includes(searchInput.value.toLowerCase().trim()) ||
-        String(channel.channelNumber).includes(searchInput.value.trim())
-      ) {
-        searchResult.push(channel);
-      }
-    });
-    showCahnnels(searchResult);
+    // searchResult = [];
+    // if (searchInput.value.trim() === "") {
+    //   displayChannelOnMode(searchOutput);
+    //   return;
+    // }
+    // searchOutput.forEach((channel) => {
+    //   if (
+    //     channel.name
+    //       .toLowerCase()
+    //       .includes(searchInput.value.toLowerCase().trim()) ||
+    //     String(channel.channelNumber).includes(searchInput.value.trim())
+    //   ) {
+    //     searchResult.push(channel);
+    //   }
+    // });
+    // displayChannelOnMode(searchResult);
+    searchText = searchInput.value.trim().toLowerCase();
+    refreshChannelDisplay();
   });
 }

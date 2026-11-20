@@ -43,16 +43,15 @@ export async function updateChannel(channelId, channelData) {
   return await response.json();
 }
 
-
 //add a new channel
 
-export async function addChannel(channelObject){
-  const response = await fetch (API_URL, {
+export async function addChannel(channelObject) {
+  const response = await fetch(API_URL, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(channelObject),
   });
-  if(!response.ok){
+  if (!response.ok) {
     throw new Error("error with fetch in addChannel");
   }
   return await response.json();
@@ -60,11 +59,11 @@ export async function addChannel(channelObject){
 
 //delete a channel
 
-export async function deleteChannel(channelId){
+export async function deleteChannel(channelId) {
   const response = await fetch(`${API_URL}/${channelId}`, {
     method: "DELETE",
   });
-  if(!response.ok){
+  if (!response.ok) {
     throw new Error("error with fetch in  deleteChannel");
   }
   return true;

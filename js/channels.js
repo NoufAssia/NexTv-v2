@@ -1,6 +1,7 @@
 const channelsDiv = document.querySelector("#listCahnnel");
 
 export function showCahnnels(data) {
+  console.log("render main:", data.length);
   channelsDiv.innerHTML = "";
 
   if (data.length === 0) {
@@ -33,14 +34,20 @@ export function showCahnnels(data) {
 
     const favButton = document.createElement("button");
     favButton.className =
-      "favButton w-4 h-4 mr-7 flex-shrink-0 ml-auto opacity-0 group-hover:opacity-100 cursor-pointer";
+      "favButton w-4 h-4 mr-1 flex-shrink-0 ml-auto opacity-0 group-hover:opacity-100 cursor-pointer";
     if (channel.isFavorite === false) {
       favButton.innerHTML = `<img src="./assets/star-vide.png" alt="not favorite icon">`;
     } else {
       favButton.innerHTML = `<img src="./assets/star.png" alt="not favorite icon">`;
     }
 
-    channelDiv.append(logo, number, name, favButton);
+    const blackListBtn = document.createElement("button");
+    blackListBtn.className =
+      "blackListBtn w-4 h-4 mr-2  flex-shrink-0 leading-none  opacity-0 group-hover:opacity-100 cursor-pointer";
+
+    blackListBtn.textContent = "⊘";
+    channelDiv.append(logo, number, name, favButton, blackListBtn);
     channelsDiv.appendChild(channelDiv);
   });
+  console.log("main DOM children:", channelsDiv.children.length);
 }
