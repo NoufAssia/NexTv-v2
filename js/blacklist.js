@@ -1,4 +1,4 @@
-import { updateChannel } from "./api.js";
+import { updateChannel, deleteChannel } from "./api.js";
 import { showCahnnels } from "./channels.js";
 
 export function blacklist(blackArray, channelArray, refreshMainChannels) {
@@ -57,28 +57,63 @@ export function blacklist(blackArray, channelArray, refreshMainChannels) {
     showBlackCahnnels(blackArray, blackChannels);
   }
   blackChannels.addEventListener("click", async (event) => {
+    //restore
+
     const restoreBtn = event.target.closest(".restore");
-    if (!restoreBtn) return;
-    const channelDiv = restoreBtn.closest(".channel");
-    const channelId = channelDiv.dataset.id;
+    if (restoreBtn) {
+      const channelDiv = restoreBtn.closest(".channel");
+      const channelId = channelDiv.dataset.id;
 
-    const channelData = blackArray.find((channel) => channel.id === channelId);
-    if (!channelData) return;
+      const channelData = blackArray.find(
+        (channel) => channel.id === channelId,
+      );
+      if (!channelData) return;
 
-    try {
-      await updateChannel(channelId, {
-        isBlacklisted: false,
-      });
+      try {
+        await updateChannel(channelId, {
+          isBlacklisted: false,
+        });
 
-      channelData.isBlacklisted = false;
+        channelData.isBlacklisted = false;
 
-      const index = blackArray.findIndex((channel) => channel.id === channelId);
-      blackArray.splice(index, 1);
-      channelArray.push(channelData);
-      refreshBlacklist();
-      refreshMainChannels();
-    } catch (error) {
-      console.error("restore failed:", error);
+        const index = blackArray.findIndex(
+          (channel) => channel.id === channelId,
+        );
+        blackArray.splice(index, 1);
+        channelArray.push(channelData);
+        refreshBlacklist();
+        refreshMainChannels();
+      } catch (error) {
+        console.error("restore failed:", error);
+      }
+      return;
+    }
+
+    // remove
+
+    const deleteBtn = event.target.closest(".delete");
+    if (deleteBtn) {
+      const selectedChannel = deleteBtn.closest(".channel");
+      const id = selectedChannel.dataset.id;
+
+      const alertMsg = confirm("Are you sure you want to delete this channel?");
+      if (!alertMsg) {
+        return;
+      }
+      try {
+        await deleteChannel(id);
+
+        const index = blackArray.findIndex(
+          (channel) => String(channel.id) === id,
+        );
+        if (index !== -1) {
+          blackArray.splice(index, 1);
+        }
+        refreshBlacklist();
+        console.log("removed success");
+      } catch (error) {
+        console.error("delete fail", error);
+      }
     }
   });
 

@@ -36,7 +36,6 @@ async function manageError() {
       refreshMainChannels,
     );
     showImg(notBlacklist, blackArray, refreshBlck, refreshMainChannels);
-
     console.log("success", data);
   } catch (error) {
     console.error("failed", error.message);
